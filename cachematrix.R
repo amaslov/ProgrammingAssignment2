@@ -1,34 +1,37 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
+## makeCacheMatrix creates a list with functions get, set, getsolve, setsolve
+## Please run it first to initialize the matrix
+## Input could be a random matrix. E.g. 
+## > m<-makeCacheMatrix(matrix(rnorm(100),nrow=10,ncol=10))
 
 makeCacheMatrix <- function(x = matrix()) {
-    s<-NULL
-    set <- function(y){
-        x<<-y
-        m<<-NULL
+    inv = NULL
+    set = function(y){
+        x <<- y
+        inv <<- NULL
     }
     
     get <- function() x
-    setSolve <- function(solve) s <<- solve
-    getSolve <- function() s
-    list(set=set, get=get, setSolve=setSolve, getSolve=getSolve)
+    setsolve <- function(solve) inv <<- solve
+    getsolve <- function() inv
+    list(set = set, get = get, setsolve = setsolve, getsolve = getsolve)
         
 }
 
 
-## Write a short comment describing this function
+## This function tries to invert (solve) the matrix.
+## It uses martix/list created with makeCacheMatrix function
+## In order to test you could try running the following command:
+## > cacheSolve(m)
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
-    s<-x$getSolve()
-    if(!is.null(s)){
+    inv <- x$getsolve()
+    if (!is.null(inv)) {
         message("Getting cached data.")
-        return(s)
+        return(inv)
     }
-    data<-x$get()
-    s<-solve(data, ...)
-    x$setSolve(s)
-    s
+    data <- x$get()
+    inv <- solve(data, ...)
+    x$setsolve(inv)
+    inv
 }
